@@ -50,6 +50,7 @@ export default function CallToAction() {
                         color: "black",
                         bg: "purple"
                     }}
+                    onClick={() => window.open("https://docs.oryntai.xyz", "_blank")}
                 >
                     Try it out
                 </Button>
@@ -65,6 +66,7 @@ export default function CallToAction() {
                         color: "whiteAlpha",
                         bg: "purple"
                     }}
+                    onClick={() => window.open("https://docs.oryntai.xyz", "_blank")}
                 >
                     Learn More
                 </Button>

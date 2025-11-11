@@ -1,10 +1,7 @@
 import { Flex, Heading, Text, Stack, Button, Image, Box } from "@chakra-ui/react";
 import LogoSrc from "../assets/logo.jpg"; // replace with your logo path
-import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
-    const navigate = useNavigate();
-
     return (
         <Flex
             direction="column"
@@ -39,6 +36,7 @@ export default function Hero() {
                         color="white"
                         borderColor="whiteAlpha.600"
                         _hover={{ bg: "whiteAlpha.200" }}
+                        onClick={() => window.open("https://docs.oryntai.xyz", "_blank")}
                     >
                         View Docs
                     </Button>
@@ -46,6 +44,7 @@ export default function Hero() {
                         size="md"
                         colorScheme="purple"
                         _hover={{ transform: "scale(1.05)" }}
+                        onClick={() => window.open("https://docs.oryntai.xyz", "_blank")}
                     >
                         Try it out
                     </Button>
@@ -93,6 +92,7 @@ export default function Hero() {
                         border="none"
                         color="white"
                         _hover={{ color: "black", bg: "white" }}
+                        onClick={() => window.open("https://docs.oryntai.xyz", "_blank")}
                     >
                         Get Started
                     </Button>
@@ -103,7 +103,7 @@ export default function Hero() {
                         color="brand.purple"
                         borderColor="brand.purple"
                         _hover={{ bg: "brand.purple", color: "white" }}
-                        onClick={() => navigate("/playground")}
+                        onClick={() => window.open("https://docs.oryntai.xyz", "_blank")}
                     >
                         Try it out
                     </Button>
