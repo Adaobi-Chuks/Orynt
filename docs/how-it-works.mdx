@@ -1,79 +1,205 @@
 ---
 title: "How It Works"
-description: "Discover how Nexra serves Game Developers, Gamers, and Fans, and what each audience can do."
+description: "Understand how Orynt uses x402, PayAI, multiple networks and AI model integrations to power pay-per-request access."
+----------------------------------------------------------------------------------------------------------------------------------
+
+# 🔍 How It Works
+
+Here’s how Orynt powers AI model access with pay-per-request billing, multi-network support, and a unified API/SDK.
+
 ---
 
-# 🎯 Who is it for
+## 🖇️ The Big Picture
 
-Nexra is built to create value for three main audiences: **Game Developers**, **Gamers**, and **Fans**. Each section below explains how they can interact with the platform and benefit from it.
+Orynt combines three core parts:
 
----
-<Columns cols={3}>
-  <Card title="Game Developers" icon="code" href="/devs/creating-tournaments">
-    Launch and manage tournaments seamlessly with Nexra’s API.
+<Columns cols={1}>
+  <Card title="AI Model Access" icon="brain">
+    One unified API/SDK that works with multiple providers (OpenAI, Gradient, etc.) for chat, images, embeddings, and speech.
   </Card>
-  <Card title="Gamers" icon="gamepad" href="/gamers/join-tournament">
-    Join or host tournaments, compete, and earn rewards.
-  </Card>
-  <Card title="Fans" icon="users" href="/users/predictions">
-    Predict outcomes, tip players, and fund tournaments.
+
+{" "}
+
+<Card title="Payment Infrastructure" icon="coins">
+  The **x402 Protocol** handles pay-per-request payments using tokens (e.g.,
+  USDC) across supported networks.
+</Card>
+
+  <Card title="Facilitator Layer" icon="network-wired">
+    **PayAI** bridges your request via Orynt to x402, ensuring smooth payment verification and AI execution.
   </Card>
 </Columns>
----
-## 👨‍💻 Game Developers
-
-Game developers can **integrate Nexra’s API** into their games to create, manage, and monetize tournaments.
-
-**Benefits:**
-- Launch tournaments instantly without building backend infrastructure.
-- Automate prize pools, entry fees, and payouts.
-- Track match results and analytics seamlessly.
-- Keep players engaged with minimal effort.
-
-**Example workflow:**
-1. Connect to Nexra API using your developer credentials.
-2. Create a tournament via `POST /tournament/create`.
-3. Sync match data automatically and manage rewards.
-4. Enable players and fans to participate effortlessly.
-
-[Learn more about integrating tournaments](/devs/creating-tournaments)
+> You’re sending a request and paying for it at the same time, no subscriptions, no API keys.
 
 ---
+## ⚡ Request & Payment Flow
 
-## 🎮 Gamers
+Here’s the step-by-step process for making a paid API/SDK request:
 
-Gamers can **join or host tournaments** in games integrated with Nexra, compete for prizes, and earn rewards.
+---
+### 1️⃣ Make a Request
 
-**Benefits:**
-- Compete in tournaments with minimal setup.
-- Pay an entry fee once and compete for the prize pool.
-- Track performance and rewards automatically.
-- Host your own tournaments for friends, fellow gamers or community.
+Send a request via SDK or REST API:
 
-**Example workflow:**
-1. Browse available tournaments in Nexra-enabled games.
-2. Pay entry fee and join a tournament.
-3. Compete and monitor your progress on the dashboard.
-4. Receive rewards automatically if you win.
+```bash
+curl -X POST "https://api.oryntai.xyz/api/v1/ai/images" \
+-H "Content-Type: application/json" \
+-H "X-Network: solana" \
+-d '{
+  "model": "dall-e-3",
+  "prompt": "A futuristic city skyline at sunset",
+  "n": 1,
+  "width": 1024,
+  "height": 1024
+}'
+```
+---
+### 2️⃣ Payment Required (HTTP 402)
 
-[Learn more about joining tournaments](/gamers/join-tournament)
+If payment is required, the server responds with `402 Payment Required` and x402 instructions.
+
+The response body follows the **x402 Protocol** specification and looks like this:
+
+```json
+{
+  "x402Version": 1,
+  "error": "X-PAYMENT header is required",
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "solana-devnet",
+      "maxAmountRequired": "40000",
+      "resource": "http://api.oryntai.xyz/api/v1/ai/images",
+      "description": "Generate images",
+      "mimeType": "",
+      "payTo": "CEBAqJoQXomRdMubgTWL1fa99d2zr2rFTMPukk62fSUw",
+      "maxTimeoutSeconds": 60,
+      "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+      "outputSchema": {
+        "input": {
+          "type": "http",
+          "method": "POST",
+          "discoverable": true
+        }
+      },
+      "extra": {
+        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+      }
+    }
+  ]
+}
+```
+This tells the client exactly **how to pay** for the request.
+
+Key fields include:
+
+- **`network`** — which chain to use (`solana-devnet`, `base`, `polygon`, etc.)
+- **`asset`** — the token used for payment (e.g., USDC mint address)
+- **`maxAmountRequired`** — the maximum amount required to fulfill the request
+- **`payTo`** — wallet address to send the payment to
+- **`maxTimeoutSeconds`** — how long the payment window stays valid
+- **`resource`** — the specific endpoint being billed
+- **`extra.feePayer`** — optional facilitator address used for covering transaction fees
+
+---
+### 3️⃣ Pay & Resend
+
+Once you receive the `402 Payment Required` response, your client (or wallet) performs a payment on the specified network, for example, sending USDC on Solana to the `payTo` address provided.
+
+After the transaction is confirmed, you resend the **same original request**, but now include the `X-PAYMENT` header containing the on-chain transaction signature (proof of payment).
+
+```bash
+-H "X-PAYMENT: <your_payment_signature>"
+```
+---
+### 4️⃣ Verification & Response
+
+If the payment proof is valid and verified by the facilitator (via **PayAI**), Orynt will process your request and return the result (e.g., an image URL).
+
+If the payment is **invalid** or **expired**, you’ll receive another `402` response with updated payment instructions.
+
+---
+### 5️⃣ Response / Result
+If payment and verification complete, you receive HTTP 200 OK along with the requested resource (text, image URL, audio, etc.).
+
+**Example Response:**
+```json
+{
+  "created": 1763033695,
+  "data": [
+    {
+      "revised_prompt": "A detailed image capturing the essence of a futuristic cityscape at sunset. Imagine towering skyscrapers with undulating, metallic surfaces and windows of neon gleam under the setting sun's orange and pink hues. Luminescent drones and transit tubes connecting the buildings together, implying a well-connected, advanced transportation network. Elevated gardens on terraces hinting at a harmonious coexistence of technology and nature. Reflections of the sunset stand stark against the cool fluorescence of the city, providing a striking contrast. The sky vibrates with shades of red and purple as the sun dips below the horizon.",
+      "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-jFYwuhSQNIZX44x76OclDLSv/user-Mlh1aMix7ZAIQqs5pYygjwod/img-1wmH9PFL3xMUJxgDb652AKqa.png?st=2025-11-13T10%3A34%3A55Z&se=2025-11-13T12%3A34%3A55Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-13T02%3A04%3A40Z&ske=2025-11-14T02%3A04%3A40Z&sks=b&skv=2024-08-04&sig=SBfGxIYDsf8xJ9hsfKTMqEvyUWJp90Doj7aKqTELHP4%3D"
+    }
+  ]
+}
+```
 
 ---
 
-## 👥 Fans
+## 🔧 Handling Failures & Refunds
+Orynt ensures reliability and fair usage across all paid requests:
 
-Fans can **engage with tournaments** by making predictions, tipping players, or funding tournaments.
+<Columns cols={1}>
+  <Card title="Failed AI Request" icon="exclamation-triangle">
+    If the payment is accepted but the AI endpoint fails, Orynt ensures your payment is **reverted or credited**.
+  </Card>
 
-**Benefits:**
-- Place predictions on tournament outcomes and earn rewards.
-- View player stats and history to assist in making predictions.
-- Support your favorite gamers through tips.
-- Follow competitions and stay engaged with your favorite games and gamers.
+  <Card title="Invalid Payment" icon="times-circle">
+    If the payment proof is invalid, the server returns HTTP 402 with updated instructions for retrying.
+  </Card>
 
-**Example workflow:**
-1. Browse live tournaments on Nexra’s web app.
-2. Place predictions on matches or tip players.
-3. Optionally fund new tournaments to support the community.
-4. Earn rewards for accurate predictions or successful tips.
+  <Card title="Multi-Network Redundancy" icon="network-wired">
+    Switch networks or tokens if one is temporarily unavailable, ensuring uninterrupted access.
+  </Card>
+</Columns>
 
-[Learn more about predictions and funding](/users/predictions)
+---
+
+## 🌐 Provider Flexibility
+
+Orynt abstracts provider-specific logic (auth, payloads, endpoints), letting developers **switch AI providers by changing only the `model` field**. No SDK rewrites or endpoint juggling required.
+
+---
+
+## 💡 Why This Matters
+
+<Columns cols={2}>
+  <Card title="No Subscriptions" icon="credit-card">
+    Pay only when you use the service, no recurring fees.
+  </Card>
+
+  <Card title="No API Keys" icon="key">
+    Your wallet or private key is the authorization — no API keys needed.
+  </Card>
+
+  <Card title="AI-Agnostic & Multi-Network" icon="globe">
+    Unified access to multiple providers; choose your preferred blockchain or token.
+  </Card>
+
+  <Card title="Fair Usage" icon="balance-scale">
+    If the AI fails, your payment is safe and automatically refunded or credited.
+  </Card>
+</Columns>
+
+---
+
+### ✅ Quick Summary
+
+Pick your model, pick your network, make your request — Orynt handles the rest automatically.
+
+---
+
+## 🧩 Start Integrating
+
+<Columns cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Set up your first integration in minutes and start sending AI requests immediately.
+  </Card>
+
+  <Card title="API Reference" icon="terminal" href="/api/introduction">
+    Explore all endpoints, parameters, and examples to integrate Orynt into your projects.
+  </Card>
+</Columns>
+
+---

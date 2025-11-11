@@ -1,82 +1,128 @@
 ---
-title: "Introduction"
-description: "Get started with Nexra’s API for creating and managing tournaments, gamers, and rewards."
----
 
-# 🧩 Nexra API Reference
+title: "API Introduction"
+description: "Get started with Orynt API: unified access to multiple AI models with pay-per-request."
+-----------------------------------------------------------------------------------------------------
 
-Nexra provides a REST API that allows game developers to **create, manage, and publish tournaments**, while automating **entry fees, prize pools, and payouts**.
+# 🖇️ Orynt API Introduction
 
-All API requests require authentication using your **Game API Key**, which you obtain from the Nexra Dashboard.
-
----
-
-## 🔑 Authentication
-
-Include your Game API Key in the `Authorization` header:
-
-```http
-Authorization: ApiKey <your_game_api_key>
-Content-Type: application/json
-```
-
-> Keep your API Key secure. Do not expose it in client-side code.
+Orynt API provides a **unified gateway** to multiple AI models, letting you **send requests directly** without worrying about API keys or subscriptions. Payments are handled via **x402 Protocol** + **PayAI**.
 
 ---
 
-## ⚡ Base URL
-
-Use the following base URL for all API requests:
-
-```
-https://api.nexra.xyz/
-```
-
----
-
-## 🏷️ Common Response Structure
-
-Most endpoints return JSON in the following structure:
-
-```json
-{
-"message": "Descriptive success or error message",
-"data": { ... }
-}
-```
-
-- `message` – Human-readable confirmation or error description.
-- `data` – Object containing endpoint-specific response details.
-
----
-
-## 📁 Core Resources
-
-The Nexra API is structured around these main resources:
-
-- **Tournaments** – Create, update, publish, and manage tournaments.
-- **Gamers** – Add players to tournaments and track performance.
-- **Rewards** – Automatically handle prize pools, payouts, and tips.
-
-> Detailed endpoint examples and parameters are listed in their dedicated pages.
-
----
-
-## 📝 Next Steps
+## ⚡ Key Features
 
 <Columns cols={2}>
-  <Card
-    title="Tournaments"
-    icon="trophy"
-    href="/api/endpoint/create-tournament"
-  >
-    Learn how to create, update, and publish tournaments.
+  <Card title="Unified AI Access" icon="brain">
+    Access chat, image, embeddings, and speech models through a single API.
   </Card>
-  <Card
-    title="Gamers & Rewards"
-    icon="coins"
-    href="/api/endpoint/join-gamer"
-  >
-    Understand how to add gamers and manage prize pools automatically.
+
+{" "}
+<Card title="Pay-As-You-Go" icon="coins">
+  Requests are billed per-use using x402 micropayments. No subscriptions or
+  credit purchases required.
+</Card>
+
+{" "}
+<Card title="Multi-Network Support" icon="network-wired">
+  Supports Solana, Base, Polygon, and other x402-compatible networks.
+</Card>
+
+  <Card title="No API Keys Needed" icon="key">
+    Authenticate with your wallet or private key. Payment itself acts as authorization.
   </Card>
 </Columns>
+
+---
+
+## 📝 Making Requests
+
+All requests must include:
+
+- `Content-Type: application/json`
+- `X-Network` header for your chosen network
+- `X-PAYMENT` header if the request requires payment (HTTP 402 response)
+
+**Example Request: Generate an image using DALL·E 3**
+
+```bash
+curl -X POST "https://api.oryntai.xyz/api/v1/ai/images" \
+  -H "Content-Type: application/json" \
+  -H "X-Network: solana" \
+  -H "X-PAYMENT: <your_payment_signature>" \
+  -d '{
+    "model": "dall-e-3",
+    "prompt": "A futuristic city skyline at sunset",
+    "n": 1,
+    "width": 1024,
+    "height": 1024
+  }'
+```
+
+---
+
+## 📦 Example Response
+
+<Columns cols={1}>
+  <Card title="Successful Response" icon="check-circle">
+```json
+{
+  "created": 1763033695,
+  "data": [
+    {
+      "revised_prompt": "A detailed image capturing the essence of a futuristic cityscape at sunset. Imagine towering skyscrapers with undulating, metallic surfaces and windows of neon gleam under the setting sun's orange and pink hues. Luminescent drones and transit tubes connecting the buildings together, implying a well-connected, advanced transportation network. Elevated gardens on terraces hinting at a harmonious coexistence of technology and nature. Reflections of the sunset stand stark against the cool fluorescence of the city, providing a striking contrast. The sky vibrates with shades of red and purple as the sun dips below the horizon.",
+      "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-jFYwuhSQNIZX44x76OclDLSv/user-Mlh1aMix7ZAIQqs5pYygjwod/img-1wmH9PFL3xMUJxgDb652AKqa.png?st=2025-11-13T10%3A34%3A55Z&se=2025-11-13T12%3A34%3A55Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-11-13T02%3A04%3A40Z&ske=2025-11-14T02%3A04%3A40Z&sks=b&skv=2024-08-04&sig=SBfGxIYDsf8xJ9hsfKTMqEvyUWJp90Doj7aKqTELHP4%3D"
+    }
+  ]
+}
+```
+  </Card>
+
+  <Card title="Payment Required Response" icon="exclamation-circle">
+```json
+{
+  "x402Version": 1,
+  "error": "X-PAYMENT header is required",
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "solana-devnet",
+      "maxAmountRequired": "40000",
+      "resource": "http://api.oryntai.xyz/api/v1/ai/images",
+      "description": "Generate images",
+      "mimeType": "",
+      "payTo": "CEBAqJoQXomRdMubgTWL1fa99d2zr2rFTMPukk62fSUw",
+      "maxTimeoutSeconds": 60,
+      "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+      "outputSchema": {
+        "input": {
+          "type": "http",
+          "method": "POST",
+          "discoverable": true
+        }
+      },
+      "extra": {
+        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+      }
+    }
+  ]
+}
+```
+  </Card>
+</Columns>
+
+---
+
+## 🧩 Next Steps
+
+<Columns cols={2}>
+  <Card title="Supported Networks" icon="globe" href="/supported-networks">
+    Learn about all networks and tokens supported by Orynt API.
+  </Card>
+
+  <Card title="Available Models" icon="brain" href="/available-models">
+    Explore all AI models accessible through the Orynt API.
+  </Card>
+</Columns>
+
+---

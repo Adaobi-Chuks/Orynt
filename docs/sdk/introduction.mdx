@@ -1,0 +1,77 @@
+---
+title: "Introduction"
+description: "Learn about the Orynt SDK, installation, and how it simplifies AI + pay-per-request integration."
+---
+
+# 🛠️ Orynt SDK Introduction
+
+The **Orynt SDK** provides a simple, unified interface for accessing multiple AI models and handling **pay-per-request payments** via the **x402 protocol** and **PayAI**.
+
+>[Orynt SDK on npm](https://www.npmjs.com/package/@orynt/ai-x402)
+
+Install the SDK via npm:  
+
+```bash
+npm add @orynt/ai-x402
+```
+
+---
+
+## 🔑 Key Features
+
+<Columns cols={2}>
+  <Card title="Unified AI Access" icon="brain">
+    Use one SDK to interact with chat, image, speech, and embeddings models across multiple providers like OpenAI and Gradient.
+  </Card>
+
+  <Card title="Built-in Payments" icon="coins">
+    Handle pay-per-request seamlessly with x402 micropayments; no subscriptions or API keys required.
+  </Card>
+
+  <Card title="Multi-Network Support" icon="network-wired">
+    Works across Solana, Polygon, Base, and more. Specify your network in the SDK configuration.
+  </Card>
+
+  <Card title="Easy Integration" icon="rocket">
+    Quickly set up the SDK in your Node.js or browser environment with minimal code.
+  </Card>
+</Columns>
+
+---
+
+## 🧩 Basic Usage
+
+```javascript
+import { Orynt } from '@orynt/ai-x402';
+
+const ai = new Orynt({
+  baseUrl: 'https://api.oryntai.xyz/api/v1',
+  network: 'solana-devnet', // choose your network
+});
+
+// Example: Chat with GPT-4.1
+const response = await ai.chat({
+  model: 'gpt-4.1',
+  messages: [{ role: 'user', content: 'Hello, Orynt!' }],
+});
+
+console.log(response);
+```
+
+---
+
+## 🌐 Learn More
+
+The SDK is fully compatible with the [Orynt REST API](https://api.oryntai.xyz/api/v1/docs) and can be used interchangeably with SDK calls or direct HTTP requests.
+
+<Columns cols={2}>
+  <Card title="Installation Guide" icon="download" href="/sdk/installation">
+    Step-by-step instructions for setting up the SDK and environment variables.
+  </Card>
+
+  <Card title="Making Requests" icon="terminal" href="/sdk/making-requests">
+    Learn how to make chat, image, speech, and embedding requests with proper payment handling.
+  </Card>
+</Columns>
+
+---

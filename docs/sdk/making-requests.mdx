@@ -1,0 +1,106 @@
+---
+title: "Making Requests"
+description: "Guide for sending chat, image, speech, and embedding requests using the Orynt SDK."
+---
+
+# 🚀 Making Requests with the Orynt SDK
+
+After installing and configuring the Orynt SDK, you can easily send AI requests while the SDK handles pay-per-request automatically.
+
+---
+
+## 1️⃣ Chat / Text Generation
+
+Send natural language prompts to supported AI models and get text responses.
+
+```javascript
+const response = await ai.chat({
+  model: "gpt-4.1",
+  messages: [{ role: "user", content: "Hello, how do I use Orynt?" }],
+});
+
+console.log(response);
+```
+
+> Payment via **x402 + PayAI** is automatically handled.
+
+---
+
+## 2️⃣ Image Generation
+
+Generate images from text descriptions using powerful AI models.
+
+```javascript
+const image = await ai.generateImage({
+  model: "dall-e-3",
+  prompt: "A futuristic city skyline at sunset",
+  n: 1,
+  width: 1024,
+  height: 1024,
+});
+
+console.log(image);
+```
+
+---
+
+## 3️⃣ Text-to-Speech (TTS)
+
+Convert written text into natural-sounding audio.
+
+```javascript
+const audio = await ai.textToSpeech({
+  model: "gpt-4o-mini-tts",
+  text: "Hello, welcome to Orynt AI service.",
+  voice: "alloy",
+  format: "mp3",
+});
+
+console.log(audio);
+```
+
+---
+
+## 4️⃣ Audio-to-Text (Speech-to-Text)
+
+Transcribe audio files into text for analysis or processing.
+
+```javascript
+const transcript = await ai.audioToText({
+  model: "whisper-1",
+  file: "./audio.mp3",
+});
+
+console.log(transcript);
+```
+
+---
+
+## 5️⃣ Generating Embeddings
+
+Create embeddings for semantic search, analytics, or AI pipelines.
+
+```javascript
+const embedding = await ai.generateEmbedding({
+  model: "text-embedding-3-small",
+  input: "Orynt provides unified AI access.",
+});
+
+console.log(embedding);
+```
+
+---
+
+## 🔗 Next Steps
+
+<Columns cols={2}>
+  <Card title="Supported Networks" icon="globe" href="/supported-networks">
+    Learn which networks and tokens are supported for x402 payments.
+  </Card>
+
+  <Card title="Available Models" icon="brain" href="/available-models">
+    Explore all AI models you can use with Orynt for chat, images, speech, and embeddings.
+  </Card>
+</Columns>
+
+---

@@ -1,0 +1,111 @@
+---
+title: "Supported Networks"
+description: "Explore all blockchain networks and tokens supported by Orynt for seamless AI + payment integration."
+-------------------------------------------------------------------------------------------------------------------
+
+# 🌐 Supported Networks & Tokens
+
+Orynt is designed to be **chain- and token-agnostic**, enabling seamless pay-per-request AI access across multiple networks. 
+
+If no network is provided in your request, the default is **`solana-devnet`**.
+
+<Columns cols={2}>
+  <Card title="Solana Mainnet" icon="solar-panel">
+    Use for production transactions. 
+
+    `solana`
+  </Card>
+
+  <Card title="Solana Devnet" icon="solar-panel">
+    Use for testing and development. 
+    
+    `solana-devnet`
+  </Card>
+
+  <Card title="Base Mainnet" icon="layer-group">
+    Ethereum-compatible production network. 
+    
+    `base`
+  </Card>
+
+  <Card title="Base Sepolia" icon="layer-group">
+    Base testnet for development. 
+    
+    `base-sepolia`
+  </Card>
+
+  <Card title="Polygon Mainnet" icon="cube">
+    Low-fee production network. 
+    
+    `polygon`
+  </Card>
+
+  <Card title="Polygon Amoy" icon="cube">
+    Polygon testnet for development. 
+    
+    `polygon-amoy`
+  </Card>
+</Columns>
+
+---
+
+## 💰 Supported Tokens
+
+Orynt supports USDC for payments via the **x402 protocol**:
+
+<Columns cols={2}>
+  <Card title="USDC" icon="coins">
+    Default stablecoin for most networks, widely accepted and compatible with all endpoints.
+
+    `USDC`
+  </Card>
+</Columns>
+
+---
+
+## 🧩 Example Integration
+
+**SDK Example:**
+```javascript
+import { Orynt } from '@orynt/ai-x402';
+
+const ai = new Orynt({
+  network: 'solana-devnet' // default if not provided
+});
+
+await ai.chat({
+  model: 'gpt-4.1',
+  messages: [{ role: 'user', content: 'Hello' }]
+});
+```
+
+**REST Example:**
+```bash
+curl -X POST "https://api.oryntai.xyz/api/v1/ai/images" \
+-H "Content-Type: application/json" \
+-H "X-Network: solana" \
+-H "X-PAYMENT: <your_payment_signature>" \
+-d '{
+  "model": "dall-e-3",
+  "prompt": "A futuristic city skyline at sunset",
+  "n": 1,
+  "width": 1024,
+  "height": 1024
+}'
+```
+
+---
+
+## 🧩 Start Using Orynt on Your Network
+
+<Columns cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Set up your first integration and start sending AI requests immediately on your chosen network.
+  </Card>
+
+  <Card title="API Reference" icon="terminal" href="/api/introduction">
+    Check all supported endpoints, request parameters, and examples for seamless network integration.
+  </Card>
+</Columns>
+
+---

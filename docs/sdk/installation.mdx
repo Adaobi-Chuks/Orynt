@@ -1,0 +1,88 @@
+---
+title: "Installation"
+description: "Step-by-step guide to installing the Orynt SDK and configuring your environment."
+---
+
+# 📦 Installing the Orynt SDK
+
+The Orynt SDK is distributed via npm and works in both **Node.js** and browser environments.
+>[Orynt SDK on npm](https://www.npmjs.com/package/@orynt/ai-x402)
+
+---
+
+## 1️⃣ Install via npm
+
+```bash
+npm add @orynt/ai-x402
+```
+
+Or, if you use yarn:
+
+```bash
+yarn add @orynt/ai-x402
+```
+
+Or, if you use pnpm:
+
+```bash
+pnpm add @orynt/ai-x402
+```
+
+---
+
+## 2️⃣ Set Up Environment Variables
+
+To authenticate with the SDK, set your wallet private key in a `.env` file:
+
+```bash
+PRIVATE_KEY=<your_wallet_private_key>
+```
+
+> Keep your private key secure and do not commit it to version control.
+
+---
+
+## 3️⃣ SDK Configuration Example
+
+```javascript
+import { Orynt } from "@orynt/ai-x402";
+
+const ai = new Orynt({
+  baseUrl: "https://api.oryntai.xyz/api/v1",
+  network: "solana-devnet" // select your network
+});
+```
+
+- **baseUrl**: API endpoint for Orynt requests
+- **network**: blockchain network for micropayments
+- **privateKey**: your wallet key for authentication and payments
+
+---
+
+## 4️⃣ Verification
+
+After setup, you can test your installation by making a simple chat request:
+
+```javascript
+const response = await ai.chat({
+  model: "gpt-4.1",
+  messages: [{ role: "user", content: "Hello!" }],
+});
+
+console.log(response);
+```
+
+You should receive a valid AI response if the installation and environment variables are correctly configured.
+
+---
+
+## 🔗 Next Steps
+
+<Columns cols={1}>
+
+  <Card title="Making Requests" icon="terminal" href="/sdk/making-requests">
+    Learn how to make chat, image, speech, and embedding requests using the SDK.
+  </Card>
+</Columns>
+
+---

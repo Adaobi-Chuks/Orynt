@@ -1,5 +1,5 @@
 {
-  "theme": "maple",
+  "theme": "willow",
   "name": "orynt",
   "colors": {
     "primary": "#805AD5",
@@ -11,34 +11,36 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
-        "pages": [
-          "index",
-          "how-it-works",
-          "quickstart"
-        ]
-      },
-      {
-        "tab": "SDK & API",
+        "tab": "Documentation",
         "groups": [
           {
             "group": "Overview",
             "pages": [
-              "sdk & api/introduction",
-              "sdk & api/supported-networks",
-              "sdk & api/available-models",
-              "sdk & api/installation",
-              "sdk & api/making-requests"
+              "index",
+              "how-it-works",
+              "supported-networks",
+              "available-models",
+              "quickstart"
             ]
           },
           {
-            "group": "Examples",
+            "group": "SDK",
             "pages": [
+              "sdk/introduction",
+              "sdk/installation",
+              "sdk/making-requests"
+            ]
+          },
+          {
+            "group": "API",
+            "pages": [
+              "api/introduction",
               "api/endpoint/text-generation",
               "api/endpoint/generate-embedding-from-text",
               "api/endpoint/image-generation",
               "api/endpoint/text-to-speech",
-              "api/endpoint/audio-to-text"
+              "api/endpoint/audio-to-text",
+              "api/endpoint/list-available-models"
             ]
           }
         ]
@@ -48,18 +50,14 @@
   "navbar": {
     "links": [
       {
-        "label": "Overview",
-        "href": "https://t.me/jessie_chuks"
-      },
-      {
         "label": "GitHub",
-        "href": "https://github.com/orynt"
+        "href": "https://github.com/eketeUg/orynt"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://nexra.xyz"
+      "label": "Web",
+      "href": "https://oryntai.xyz"
     }
   },
   "contextual": {
@@ -76,8 +74,8 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/NexraLabs",
-      "github": "https://github.com/Nexra-Labs"
+      "telegram": "https://t.me/jessie_chuks",
+      "github": "https://github.com/eketeUg/orynt"
     }
   }
 }

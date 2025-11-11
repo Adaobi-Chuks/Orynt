@@ -1,38 +1,29 @@
 {
     "openapi": "3.0.0",
     "paths": {
-        "/api/v1": {
-            "get": {
-                "operationId": "AppController_getHello",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "App"
-                ]
-            }
-        },
-        "/api/v1/premium": {
-            "get": {
-                "operationId": "AppController_getHelloPremium",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "App"
-                ]
-            }
-        },
         "/api/v1/ai/chat": {
             "post": {
                 "operationId": "AiController_chat",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "X-Network",
+                        "in": "header",
+                        "required": true,
+                        "description": "Blockchain network to use (e.g., solana, solana-devnet, base, polygon)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "X-PAYMENT",
+                        "in": "header",
+                        "required": false,
+                        "description": "On-chain payment proof for HTTP 402 requests",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -45,7 +36,63 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Chat response from AI model"
+                        "description": "Chat response from AI model",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "chatExample": {
+                                        "summary": "Example chat response",
+                                        "value": {
+                                            "id": "chat-123",
+                                            "model": "gpt-4.1",
+                                            "response": "Hello! How can I assist you today?",
+                                            "usage": {
+                                                "tokens": 35
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Payment required (x402)",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "x402Example": {
+                                        "summary": "Example 402 payment response",
+                                        "value": {
+                                            "x402Version": 1,
+                                            "error": "X-PAYMENT header is required",
+                                            "accepts": [
+                                                {
+                                                    "scheme": "exact",
+                                                    "network": "solana-devnet",
+                                                    "maxAmountRequired": "40000",
+                                                    "resource": "http://api.oryntai.xyz/api/v1/ai/chat",
+                                                    "description": "Run chat model",
+                                                    "mimeType": "",
+                                                    "payTo": "CEBAqJoQXomRdMubgTWL1fa99d2zr2rFTMPukk62fSUw",
+                                                    "maxTimeoutSeconds": 60,
+                                                    "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                                                    "outputSchema": {
+                                                        "input": {
+                                                            "type": "http",
+                                                            "method": "POST",
+                                                            "discoverable": true
+                                                        }
+                                                    },
+                                                    "extra": {
+                                                        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "summary": "Run a chat model",
@@ -57,7 +104,26 @@
         "/api/v1/ai/embeddings": {
             "post": {
                 "operationId": "AiController_embeddings",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "X-Network",
+                        "in": "header",
+                        "required": true,
+                        "description": "Blockchain network to use (e.g., solana, solana-devnet, base, polygon)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "X-PAYMENT",
+                        "in": "header",
+                        "required": false,
+                        "description": "On-chain payment proof for HTTP 402 requests",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -70,7 +136,64 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Embedding vector"
+                        "description": "Embedding vector",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "embeddingExample": {
+                                        "summary": "Example embedding response",
+                                        "value": {
+                                            "model": "text-embedding-3-small",
+                                            "embedding": [
+                                                0.01,
+                                                0.05,
+                                                0.23,
+                                                0.56
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Payment required (x402)",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "x402Example": {
+                                        "summary": "Example 402 payment response",
+                                        "value": {
+                                            "x402Version": 1,
+                                            "error": "X-PAYMENT header is required",
+                                            "accepts": [
+                                                {
+                                                    "scheme": "exact",
+                                                    "network": "solana-devnet",
+                                                    "maxAmountRequired": "40000",
+                                                    "resource": "http://api.oryntai.xyz/api/v1/ai/embeddings",
+                                                    "description": "Generate embeddings",
+                                                    "mimeType": "",
+                                                    "payTo": "CEBAqJoQXomRdMubgTWL1fa99d2zr2rFTMPukk62fSUw",
+                                                    "maxTimeoutSeconds": 60,
+                                                    "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                                                    "outputSchema": {
+                                                        "input": {
+                                                            "type": "http",
+                                                            "method": "POST",
+                                                            "discoverable": true
+                                                        }
+                                                    },
+                                                    "extra": {
+                                                        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "summary": "Generate embeddings from text",
@@ -82,7 +205,26 @@
         "/api/v1/ai/images": {
             "post": {
                 "operationId": "AiController_generateImages",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "X-Network",
+                        "in": "header",
+                        "required": true,
+                        "description": "Blockchain network to use (e.g., solana, solana-devnet, base, polygon)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "X-PAYMENT",
+                        "in": "header",
+                        "required": false,
+                        "description": "On-chain payment proof for HTTP 402 requests",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -95,7 +237,61 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Generated images"
+                        "description": "Generated images",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "imageExample": {
+                                        "summary": "Example image response",
+                                        "value": {
+                                            "model": "dall-e-3",
+                                            "images": [
+                                                "https://example.com/image1.png"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Payment required (x402)",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "x402Example": {
+                                        "summary": "Example 402 payment response",
+                                        "value": {
+                                            "x402Version": 1,
+                                            "error": "X-PAYMENT header is required",
+                                            "accepts": [
+                                                {
+                                                    "scheme": "exact",
+                                                    "network": "solana-devnet",
+                                                    "maxAmountRequired": "40000",
+                                                    "resource": "http://api.oryntai.xyz/api/v1/ai/images",
+                                                    "description": "Generate images",
+                                                    "mimeType": "",
+                                                    "payTo": "CEBAqJoQXomRdMubgTWL1fa99d2zr2rFTMPukk62fSUw",
+                                                    "maxTimeoutSeconds": 60,
+                                                    "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                                                    "outputSchema": {
+                                                        "input": {
+                                                            "type": "http",
+                                                            "method": "POST",
+                                                            "discoverable": true
+                                                        }
+                                                    },
+                                                    "extra": {
+                                                        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "summary": "Generate images from prompt",
@@ -107,7 +303,26 @@
         "/api/v1/ai/stt": {
             "post": {
                 "operationId": "AiController_transcribe",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "X-Network",
+                        "in": "header",
+                        "required": true,
+                        "description": "Blockchain network to use (e.g., solana, solana-devnet, base, polygon)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "X-PAYMENT",
+                        "in": "header",
+                        "required": false,
+                        "description": "On-chain payment proof for HTTP 402 requests",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -120,7 +335,59 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Transcribed text"
+                        "description": "Transcribed text",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "sttExample": {
+                                        "summary": "Example transcription response",
+                                        "value": {
+                                            "model": "whisper-1",
+                                            "transcription": "Hello world, this is a test audio."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Payment required (x402)",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "x402Example": {
+                                        "summary": "Example 402 payment response",
+                                        "value": {
+                                            "x402Version": 1,
+                                            "error": "X-PAYMENT header is required",
+                                            "accepts": [
+                                                {
+                                                    "scheme": "exact",
+                                                    "network": "solana-devnet",
+                                                    "maxAmountRequired": "40000",
+                                                    "resource": "http://api.oryntai.xyz/api/v1/ai/stt",
+                                                    "description": "Transcribe audio",
+                                                    "mimeType": "",
+                                                    "payTo": "CEBAqJoQXomRdMubgTWL1fa99d2zr2rFTMPukk62fSUw",
+                                                    "maxTimeoutSeconds": 60,
+                                                    "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                                                    "outputSchema": {
+                                                        "input": {
+                                                            "type": "http",
+                                                            "method": "POST",
+                                                            "discoverable": true
+                                                        }
+                                                    },
+                                                    "extra": {
+                                                        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "summary": "Transcribe audio to text",
@@ -132,7 +399,26 @@
         "/api/v1/ai/tts": {
             "post": {
                 "operationId": "AiController_tts",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "X-Network",
+                        "in": "header",
+                        "required": true,
+                        "description": "Blockchain network to use (e.g., solana, solana-devnet, base, polygon)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "X-PAYMENT",
+                        "in": "header",
+                        "required": false,
+                        "description": "On-chain payment proof for HTTP 402 requests",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -145,7 +431,59 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Generated speech/audio file"
+                        "description": "Generated speech/audio file",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "ttsExample": {
+                                        "summary": "Example TTS response",
+                                        "value": {
+                                            "model": "gpt-voice-1",
+                                            "audioUrl": "https://example.com/audio.mp3"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Payment required (x402)",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "x402Example": {
+                                        "summary": "Example 402 payment response",
+                                        "value": {
+                                            "x402Version": 1,
+                                            "error": "X-PAYMENT header is required",
+                                            "accepts": [
+                                                {
+                                                    "scheme": "exact",
+                                                    "network": "solana-devnet",
+                                                    "maxAmountRequired": "40000",
+                                                    "resource": "http://api.oryntai.xyz/api/v1/ai/tts",
+                                                    "description": "Convert text to speech",
+                                                    "mimeType": "",
+                                                    "payTo": "CEBAqJoQXomRdMubgTWL1fa99d2zr2rFTMPukk62fSUw",
+                                                    "maxTimeoutSeconds": 60,
+                                                    "asset": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                                                    "outputSchema": {
+                                                        "input": {
+                                                            "type": "http",
+                                                            "method": "POST",
+                                                            "discoverable": true
+                                                        }
+                                                    },
+                                                    "extra": {
+                                                        "feePayer": "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "summary": "Convert text to speech",
@@ -160,8 +498,8 @@
                 "parameters": [
                     {
                         "name": "provider",
-                        "required": false,
                         "in": "query",
+                        "required": false,
                         "description": "Filter models by provider",
                         "schema": {
                             "type": "string"
@@ -170,7 +508,33 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of AI models"
+                        "description": "List of AI models",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "modelListExample": {
+                                        "summary": "Example models response",
+                                        "value": [
+                                            {
+                                                "name": "gpt-4.1",
+                                                "provider": "OpenAI",
+                                                "type": "chat"
+                                            },
+                                            {
+                                                "name": "dall-e-3",
+                                                "provider": "OpenAI",
+                                                "type": "image"
+                                            },
+                                            {
+                                                "name": "text-embedding-3-small",
+                                                "provider": "OpenAI",
+                                                "type": "embedding"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "summary": "List all available AI models",
@@ -189,8 +553,8 @@
     "tags": [],
     "servers": [
         {
-            "url": "http://localhost:3000",
-            "description": "Local Development Server"
+            "url": "https://api.oryntai.xyz/",
+            "description": "Base URL"
         }
     ],
     "components": {

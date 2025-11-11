@@ -1,185 +1,111 @@
 ---
 title: "Quickstart"
-description: "Get started with Nexra quickly: integrate tournaments, allow gamers to join, and start earning."
+description: "Start using Orynt in minutes — connect, make your first AI request, and handle pay-per-request flow with x402 + PayAI."
 ---
 
-# 🚀 Quickstart with Nexra
+## Step 1: Install SDK
 
-Follow these steps to **integrate Nexra and create your first tournament**. Each step is expandable for details and examples.
+```bash
+npm add @orynt/ai-x402
+```
 
-<Steps>
-  <Step title="1. Get Your Game API Key">
-    First, register your game in the Nexra Dashboard:
+Set your wallet private key in `.env`:
 
-    1. Go to the [Nexra Dashboard](https://nexra.xyz/dashboard).
-    2. Click **Create New Game** and fill in the details.
-    3. Once your game is created, you will receive a **Game API Key**.
-
-    **Use this API Key for authorization in your requests:**
-
-    ```http
-    Authorization: ApiKey <your_game_api_key>
-    Content-Type: application/json
-    ```
-
-    > Replace `<your_game_api_key>` with the API Key provided for your game.
-
-  </Step>
-
-  <Step title="2. Create Your First Tournament">
-    Use the `POST /tournament/create` endpoint to create tournaments from your game.
-
-    **Request Example:**
-
-    ```http
-    POST /tournament/create
-    Authorization: ApiKey <your_game_api_key>
-    ```
-    **Request Body Example:**
-
-    ```json
-    {
-      "game": "67188e92b41c0eec54f22b1f",
-      "name": "Battle of Nexra",
-      "description": "An intense tournament for top gamers",
-      "entryFee": 50,
-      "startTime": "2025-11-10T18:00:00Z",
-      "endTime": "2025-11-10T21:00:00Z"
-    }
-    ```
-
-    **Response Example:**
-
-    ```json
-    {
-      "message": "Tournament created successfully",
-      "tournament": {
-        "message": "Tournament created successfully",
-        "tournament": {
-            "game": {
-                "_id": "68f9ce6d27a07cdb23dd65c7",
-                "name": "Battle Arenaa",
-                "id": "68f9ce6d27a07cdb23dd65c7"
-            },
-            "name": "Battle of Nexra",
-            "description": "An intense tournament for top gamers",
-            "entryFee": 50,
-            "prizePool": 0,
-            "status": "pending",
-            "startTime": "2025-11-10T18:00:00.000Z",
-            "endTime": "2025-11-10T21:00:00.000Z",
-            "winner": null,
-            "_id": "68fa2b750366dd5ff66d599d",
-            "createdAt": "2025-10-23T13:19:49.620Z",
-            "updatedAt": "2025-10-23T13:19:49.620Z",
-            "id": "68fa2b750366dd5ff66d599d"
-        }
-      }
-    }
-    ```
-    > Keep the `id` for future updates or publishing.
-
-  </Step>
-
-  <Step title="3. Publish Your Tournament">
-    Make your tournament live for gamers via `PATCH /tournament/{tournamentId}/publish`.
-
-    **Request Example:**
-
-    ```http
-    PATCH /tournament/:tournamentId/publish
-    Authorization: ApiKey <your_game_api_key>
-    ```
-
-    **Response Example:**
-
-    ```json
-    {
-      "message": "Tournament published successfully",
-      "tournament": {
-        "game": {
-            "_id": "68f9ce6d27a07cdb23dd65c7",
-            "name": "Battle Arenaa",
-            "id": "68f9ce6d27a07cdb23dd65c7"
-        },
-        "name": "Battle of Nexra",
-        "description": "An intense tournament for top gamers",
-        "entryFee": 50,
-        "prizePool": 0,
-        "status": "pending",
-        "startTime": "2025-11-10T18:00:00.000Z",
-        "endTime": "2025-11-10T21:00:00.000Z",
-        "winner": null,
-        "_id": "68fa2b750366dd5ff66d599d",
-        "createdAt": "2025-10-23T13:19:49.620Z",
-        "updatedAt": "2025-10-23T13:19:49.620Z",
-        "id": "68fa2b750366dd5ff66d599d"
-      }
-    }
-    ```
-
-  </Step>
-
-  <Step title="4. Gamers Join via Your Game">
-    Once integrated, gamers can join tournaments from your game. Your game calls: `POST /tournament/{tournamentId}/join` when a gamer chooses to enter.
-    Developers only need to integrate this action; gamers trigger it naturally through the game interface.
-
-    **Request Example:**
-
-    ```http
-    POST /tournament/:tournamentId/join
-    Authorization: ApiKey <your_game_api_key>
-    ```
-
-    **Request Body Example:**
-
-    ```json
-    {
-      "gamer": "silent_gamer"
-    }
-    ```
-
-    **Response Example:**
-
-    ```json
-    {
-      "message": "Gamer successfully joined the tournament",
-      "entry": {
-          "id": "6718ac03e0ad9b01f43b76b3",
-          "tournament": "6718a8dde0ad9b01f43b76a2",
-          "gamer": "6718ab5ee0ad9b01f43b76a8",
-          "entryFee": 100,
-          "joinedAt": "2025-10-23T13:25:48.112Z",
-          "eliminated": false,
-          "eliminatedAt": null,
-          "rank": null,
-          "createdAt": "2025-10-23T13:25:48.112Z",
-          "updatedAt": "2025-10-23T13:25:48.112Z"
-      }
-    }
-    ```
-
-  </Step>
-
-  <Step title="5. Optional: Update or Eliminate Players">
-    Developers can update tournament details or remove players dynamically via: `PATCH /tournament/{tournamentId}/eliminate`
-
-  </Step>
-</Steps>
+```bash
+PRIVATE_KEY=<your_wallet_private_key>
+```
 
 ---
 
-## 🎯 Next Steps
+## Step 2: Initialize SDK
 
-<Columns cols={2}>
-  <Card
-    title="API Reference"
-    icon="terminal"
-    href="/api/introduction"
-  >
-    Explore all Nexra endpoints and integrate advanced features.
-  </Card>
-  <Card title="Rewards" icon="coins" href="/gamers/rewards">
-    Learn how Nexra automatically manages prizes, entry fees, and payouts for tournaments.
-  </Card>
-</Columns>
+```javascript
+import { Orynt } from "@orynt/ai-x402";
+
+const ai = new Orynt({
+  baseUrl: "https://api.oryntai.xyz/api/v1",
+  network: "solana-devnet",
+});
+```
+
+---
+
+## Step 3: Chat Example
+
+```javascript
+await ai.chat({
+  model: "gpt-4.1",
+  messages: [{ role: "user", content: "Hello" }],
+});
+
+await ai.chat({
+  model: "gpt-4.1",
+  input: "Explain the x402 in one sentence.",
+});
+
+await ai.chat({
+  model: "gpt-4.1",
+  prompt: "Explain the x402 in one sentence.",
+});
+```
+
+---
+
+## Step 3: Image Generation
+
+```javascript
+await ai.generateImage({
+  model: "dall-e-3",
+  prompt: "A futuristic city skyline at sunset",
+  n: 1,
+  width: 1024,
+  height: 1024,
+});
+```
+
+---
+
+## Step 3: Text-to-Speech
+
+```javascript
+await ai.textToSpeech({
+  model: "gpt-4o-mini-tts",
+  text: "Hello, welcome to X402 AI service.",
+  voice: "alloy",
+  format: "mp3",
+});
+```
+
+---
+
+## Step 4: Supported Networks
+
+- base
+- base-sepolia
+- solana
+- solana-devnet
+- polygon
+- polygon-amoy
+
+Specify network via `network` in SDK, or `X-Network` in REST requests.
+
+---
+
+## Step 5: Payment Flow
+
+- Requests handle **x402 micropayments** via PayAI
+- If payment is required, the SDK generates a signed payload
+- Request is automatically retried after payment
+- Failed requests refund your token automatically
+
+For REST requests, include `X-PAYMENT` header with the signed proof.
+
+---
+
+## Step 6: Next Steps
+
+- Explore the [API Reference](https://api.oryntai.xyz/api/v1/docs)
+- Try other models: `gradient-stratos`, `whisper-1`, etc.
+- Generate embeddings, text-to-speech, or image outputs seamlessly
+
+Orynt abstracts provider logic — just change `model` and `network` to switch AI backends.

@@ -1,0 +1,81 @@
+---
+title: "Available Models"
+description: "Overview of AI models accessible via Orynt, including chat, image, speech, and embeddings."
+---
+
+# 🤖 Available Models
+
+Orynt provides unified access to multiple AI models across providers, making it easy to switch between **chat**, **image**, **speech**, and **embedding** models with a single API/SDK.
+
+---
+
+## 🧠 AI Model Providers
+
+| Provider     | Description                                                       | Example Models                                                                                                  |
+| ------------ | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **OpenAI**   | Full suite of AI models for chat, images, speech, and embeddings  | `gpt-4.1`, `gpt-4o-mini`, `gpt-3.5-turbo`, `whisper-1`, `dall-e-3`, `text-embedding-3-small`, `gpt-4o-mini-tts` |
+| **Gradient** | Decentralized AI provider integrating AI21 and open-source models | `qwen/qwen3-coder-480b-instruct-fp8`, `openai/gpt-oss-120b-free`                                                |
+
+---
+
+## ⚙️ Model Capabilities
+
+| Capability                 | Description                                                               | Example Models                                                 |
+| -------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| **Chat / Text Generation** | Generate text, answer questions, and perform reasoning tasks              | `gpt-4.1`, `gpt-4o-mini`, `qwen/qwen3-coder-480b-instruct-fp8` |
+| **Image Generation**       | Create images from text prompts                                           | `dall-e-3`                                                     |
+| **Embeddings**             | Convert text into vector representations for semantic search or analytics | `text-embedding-3-small`                                       |
+| **Speech-to-Text (STT)**   | Transcribe audio files into text                                          | `whisper-1`                                                    |
+| **Text-to-Speech (TTS)**   | Generate natural-sounding speech from text prompts                        | `gpt-4o-mini-tts`                                              |
+
+---
+
+### 🧩 SDK Example: Chat Model
+
+```javascript
+import { Orynt } from "@orynt/ai-x402";
+
+const ai = new Orynt({
+  baseUrl: "https://api.oryntai.xyz/api/v1",
+  network: "solana",
+});
+
+const response = await ai.chat({
+  model: "gpt-4.1",
+  messages: [{ role: "user", content: "Hello, Orynt!" }],
+});
+
+console.log(response);
+```
+
+### 🧩 REST API Example: Chat Model
+
+```bash
+curl -X POST "https://api.oryntai.xyz/api/v1/ai/images" \
+-H "Content-Type: application/json" \
+-H "X-Network: solana" \
+-H "X-PAYMENT: <your_payment_signature>" \
+-d '{
+  "model": "dall-e-3",
+  "prompt": "A futuristic city skyline at sunset",
+  "n": 1,
+  "width": 1024,
+  "height": 1024
+}'
+```
+
+---
+
+## 🧩 Start Integrating
+
+<Columns cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Set up your first integration in minutes and start sending AI requests immediately.
+  </Card>
+
+  <Card title="API Reference" icon="terminal" href="/api/introduction">
+    Explore all endpoints, parameters, and examples to integrate Orynt into your projects.
+  </Card>
+</Columns>
+
+---
