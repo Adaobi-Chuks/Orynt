@@ -1,0 +1,357 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/api/v1": {
+            "get": {
+                "operationId": "AppController_getHello",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "App"
+                ]
+            }
+        },
+        "/api/v1/premium": {
+            "get": {
+                "operationId": "AppController_getHelloPremium",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "App"
+                ]
+            }
+        },
+        "/api/v1/ai/chat": {
+            "post": {
+                "operationId": "AiController_chat",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChatDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Chat response from AI model"
+                    }
+                },
+                "summary": "Run a chat model",
+                "tags": [
+                    "Ai"
+                ]
+            }
+        },
+        "/api/v1/ai/embeddings": {
+            "post": {
+                "operationId": "AiController_embeddings",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmbeddingDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Embedding vector"
+                    }
+                },
+                "summary": "Generate embeddings from text",
+                "tags": [
+                    "Ai"
+                ]
+            }
+        },
+        "/api/v1/ai/images": {
+            "post": {
+                "operationId": "AiController_generateImages",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ImageDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Generated images"
+                    }
+                },
+                "summary": "Generate images from prompt",
+                "tags": [
+                    "Ai"
+                ]
+            }
+        },
+        "/api/v1/ai/stt": {
+            "post": {
+                "operationId": "AiController_transcribe",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SttDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Transcribed text"
+                    }
+                },
+                "summary": "Transcribe audio to text",
+                "tags": [
+                    "Ai"
+                ]
+            }
+        },
+        "/api/v1/ai/tts": {
+            "post": {
+                "operationId": "AiController_tts",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TtsDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Generated speech/audio file"
+                    }
+                },
+                "summary": "Convert text to speech",
+                "tags": [
+                    "Ai"
+                ]
+            }
+        },
+        "/api/v1/ai/models": {
+            "get": {
+                "operationId": "AiController_listModels",
+                "parameters": [
+                    {
+                        "name": "provider",
+                        "required": false,
+                        "in": "query",
+                        "description": "Filter models by provider",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of AI models"
+                    }
+                },
+                "summary": "List all available AI models",
+                "tags": [
+                    "Ai"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Orynt API",
+        "description": "API documentation for the Orynt x402 ai api wrapper",
+        "version": "1.0",
+        "contact": {}
+    },
+    "tags": [],
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Local Development Server"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "ChatDto": {
+                "type": "object",
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "description": "Model to use",
+                        "example": "gpt-4.1"
+                    },
+                    "prompt": {
+                        "type": "string",
+                        "description": "Optional prompt text",
+                        "example": "Hello, world!"
+                    },
+                    "messages": {
+                        "description": "Messages array or string input for chat models",
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "input": {
+                        "description": "Input text or array for chat/completion",
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "temperature": {
+                        "type": "number",
+                        "description": "Temperature setting",
+                        "minimum": 0,
+                        "maximum": 2,
+                        "example": 0.7
+                    },
+                    "max_tokens": {
+                        "type": "number",
+                        "description": "Maximum tokens for completion",
+                        "minimum": 1,
+                        "example": 256
+                    },
+                    "options": {
+                        "type": "object",
+                        "description": "Provider-specific extra fields"
+                    }
+                },
+                "required": [
+                    "model"
+                ]
+            },
+            "EmbeddingDto": {
+                "type": "object",
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "description": "Embedding model to use",
+                        "example": "text-embedding-3-small"
+                    },
+                    "text": {
+                        "type": "string",
+                        "description": "Text to embed",
+                        "example": "Hello world"
+                    },
+                    "options": {
+                        "type": "object",
+                        "description": "Provider-specific options"
+                    }
+                },
+                "required": [
+                    "model",
+                    "text"
+                ]
+            },
+            "ImageDto": {
+                "type": "object",
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "description": "Image generation model",
+                        "example": "dall-e-3"
+                    },
+                    "prompt": {
+                        "type": "string",
+                        "description": "Prompt for image generation",
+                        "example": "A futuristic cityscape at sunset"
+                    },
+                    "n": {
+                        "type": "number",
+                        "description": "Number of images to generate",
+                        "minimum": 1,
+                        "example": 1
+                    },
+                    "size": {
+                        "type": "string",
+                        "description": "Image size",
+                        "example": "512x512"
+                    },
+                    "options": {
+                        "type": "object",
+                        "description": "Provider-specific options"
+                    }
+                },
+                "required": [
+                    "model",
+                    "prompt"
+                ]
+            },
+            "SttDto": {
+                "type": "object",
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "description": "STT model to use",
+                        "example": "whisper-1"
+                    },
+                    "audioUrl": {
+                        "type": "string",
+                        "description": "URL of the audio file",
+                        "example": "https://example.com/audio.mp3"
+                    },
+                    "options": {
+                        "type": "object",
+                        "description": "Provider-specific options"
+                    }
+                },
+                "required": [
+                    "model",
+                    "audioUrl"
+                ]
+            },
+            "TtsDto": {
+                "type": "object",
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "description": "TTS model to use",
+                        "example": "gpt-voice-1"
+                    },
+                    "text": {
+                        "type": "string",
+                        "description": "Text to convert to speech",
+                        "example": "Hello world"
+                    },
+                    "voice": {
+                        "type": "string",
+                        "description": "Voice style or name",
+                        "example": "alloy"
+                    },
+                    "options": {
+                        "type": "object",
+                        "description": "Provider-specific options"
+                    }
+                },
+                "required": [
+                    "model",
+                    "text"
+                ]
+            }
+        }
+    }
+}

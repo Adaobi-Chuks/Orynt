@@ -1,0 +1,83 @@
+{
+  "theme": "maple",
+  "name": "orynt",
+  "colors": {
+    "primary": "#805AD5",
+    "light": "#A78BFA",
+    "dark": "#1A1523"
+  },
+  "favicon": "/favicon.ico",
+  "openapi": "/api/openapi.json",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "pages": [
+          "index",
+          "how-it-works",
+          "quickstart"
+        ]
+      },
+      {
+        "tab": "SDK & API",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "sdk & api/introduction",
+              "sdk & api/supported-networks",
+              "sdk & api/available-models",
+              "sdk & api/installation",
+              "sdk & api/making-requests"
+            ]
+          },
+          {
+            "group": "Examples",
+            "pages": [
+              "api/endpoint/text-generation",
+              "api/endpoint/generate-embedding-from-text",
+              "api/endpoint/image-generation",
+              "api/endpoint/text-to-speech",
+              "api/endpoint/audio-to-text"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Overview",
+        "href": "https://t.me/jessie_chuks"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/orynt"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://nexra.xyz"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/NexraLabs",
+      "github": "https://github.com/Nexra-Labs"
+    }
+  }
+}

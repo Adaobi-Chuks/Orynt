@@ -1,0 +1,94 @@
+---
+title: "Introduction"
+description: "Integrate Orynt into your project via SDK or API with pay-per-request using crypto wallets."
+---
+
+# ⚙️ Orynt SDK & REST API
+
+Orynt provides developers with both a **lightweight SDK** and a **REST API** to access multiple AI models in a unified way. Payments are handled on Solana through **x402 micropayments**, allowing pay-per-request in USDC. The SDK and API are designed for **quick integration**, consistent endpoints, and easy authorization via crypto wallets.
+
+---
+## 🧩 Core Components
+
+<Columns cols={2}>
+  <Card title="x402 Protocol" icon="bolt">
+    Handles pay-per-request micropayments in USDC, enabling metered usage for AI calls.
+  </Card>
+  
+  <Card title="@solana/web3.js" icon="cube">
+    Provides wallet-based authorization and interacts with the Solana blockchain for transactions.
+  </Card>
+  
+  <Card title="PayAI Network" icon="network-wired">
+    Facilitates access to the x402 protocol and standardizes communication with multiple AI models.
+  </Card>
+
+  <Card title="Gradient AI" icon="robot">
+    One of the AI providers you can connect to via Orynt’s unified SDK and API endpoints.
+  </Card>
+</Columns>
+
+---
+
+## 📦 SDK
+
+The **Orynt SDK** is model-agnostic, offering simple, unified access to AI capabilities including chat, embeddings, image generation, text-to-speech, and speech-to-text.
+
+**SDK Details:**
+
+- **Name:** `orynt/ai-x402`
+- **Installation:**
+
+```
+npm install orynt-sdk
+```
+
+- **Features:**
+  - Unified AI Endpoints for multiple AI tasks
+  - Model-Agnostic: Works with OpenAI, Gradient, and more
+  - Pay-per-Request: Handles USDC micropayments via x402
+  - Wallet-based Authorization: No API keys required
+
+---
+
+## 🌐 REST API
+
+The REST API mirrors all SDK functionality. Ideal for projects outside Node.js environments.
+
+Users can send direct API requests via the base URL:
+
+```
+https://api.oryntai.xyz/api/v1
+```
+
+**Example Request**
+
+```
+    curl -X POST https://api.oryntai.xyz/api/v1/ai/images \
+      -H "Content-Type: application/json" \
+      -H "X-Network: solana" \
+      -d '{
+        "model": "dall-e-3",
+        "prompt": "A futuristic city skyline at sunset",
+        "n": 1,
+        "width": 1024,
+        "height": 1024
+      }'
+```
+
+---
+
+
+## 📘 API Reference
+
+You can explore all Orynt API endpoints, request/response formats, and schemas using the live Swagger documentation.
+
+<Card
+  title="OpenAPI Reference"
+  icon="book-open"
+  href="https://api.oryntai.xyz/api/v1/docs"
+>
+  View detailed endpoint specifications, supported parameters, and example requests directly in Swagger UI.
+</Card>
+
+---
